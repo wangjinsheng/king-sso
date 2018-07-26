@@ -2,6 +2,7 @@ package com.king.sso.core.filter;
 
 import com.king.sso.core.conf.Conf;
 import com.king.sso.core.user.KingUser;
+import com.king.sso.core.util.CodecUtil;
 import com.king.sso.core.util.JsonMapper;
 import com.king.sso.core.util.MiscUtils;
 import com.king.sso.core.util.SsoLoginHelper;
@@ -44,11 +45,15 @@ public class KingSsoFilter extends HttpServlet implements Filter {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;
         String path = request.getServletPath();
-        String link = request.getRequestURL().toString();
 
         if (MiscUtils.isNotEmpty(logoutPath) && MiscUtils.equals(path, logoutPath)) {
-            SsoLoginHelper.removeSessionId(request,response);
-            response.sendRedirect(ssoServer.concat(Conf.SSO_LOGOUT));
+            SsoLoginHelper.loginOut(request,response);
+            String referer = request.getHeader("referer");
+            if (MiscUtils.isNotEmpty(referer)) {
+                response.sendRedirect(referer);
+            } else {
+                response.sendRedirect(ssoServer.concat(Conf.SSO_LOGOUT));
+            }
             return;
         }
 
@@ -75,8 +80,13 @@ public class KingSsoFilter extends HttpServlet implements Filter {
                 response.getWriter().println(JsonMapper.toJson(Conf.SSO_LOGIN_FAIL_RESULT));
                 return;
             }else {
+                String link = request.getRequestURL().toString();
+                String queryString = request.getQueryString();
+                if (MiscUtils.isNotEmpty(queryString)) {
+                    link = link.concat("?").concat(queryString);
+                }
                 String loginPageUrl = ssoServer.concat(Conf.SSO_LOGIN).concat("?").concat(Conf.REDIRECT_URL)
-                    .concat("=").concat(link);
+                    .concat("=").concat(CodecUtil.base64Encode(link));
                 response.sendRedirect(loginPageUrl);
                 return;
             }

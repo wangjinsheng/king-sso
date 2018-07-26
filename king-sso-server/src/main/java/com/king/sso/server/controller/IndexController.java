@@ -3,6 +3,7 @@ package com.king.sso.server.controller;
 import com.king.sso.core.conf.Conf;
 import com.king.sso.core.exception.KingSsoException;
 import com.king.sso.core.user.KingUser;
+import com.king.sso.core.util.CodecUtil;
 import com.king.sso.core.util.MiscUtils;
 import com.king.sso.core.util.SsoLoginHelper;
 import com.king.sso.server.core.entity.UserInfo;
@@ -45,7 +46,7 @@ public class IndexController {
     public String login(Model model, HttpServletRequest request) {
         KingUser kingUser = SsoLoginHelper.loginCheck(request);
         if (kingUser != null) {
-            String redirectUrl = request.getParameter(Conf.REDIRECT_URL);
+            String redirectUrl = CodecUtil.base64Decode(request.getParameter(Conf.REDIRECT_URL)) ;
             if (MiscUtils.isNotEmpty(redirectUrl)) {
                 String sessionId = SsoLoginHelper.getSessionIdByCookie(request);
                 String redirectUrlEnd = redirectUrl.concat("?").concat(Conf.SSO_SESSION_ID).concat("=")
@@ -115,8 +116,8 @@ public class IndexController {
         // success redirect
         String redirectUrl = request.getParameter(Conf.REDIRECT_URL);
         if (StringUtils.isNotBlank(redirectUrl)) {
-            String redirectUrlFinal = redirectUrl + "?" + Conf.SSO_SESSION_ID + "=" + sessionId;
-            return "redirect:" + redirectUrlFinal;
+            String redirectUrlFinal = redirectUrl;
+            return "redirect:" + CodecUtil.base64Decode(redirectUrlFinal);
         } else {
             return "redirect:/";
         }
