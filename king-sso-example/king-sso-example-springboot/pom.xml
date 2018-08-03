@@ -49,7 +49,7 @@
             <artifactId>spring-boot-starter-freemarker</artifactId>
         </dependency>
 
-        <!-- xxl-sso-core -->
+        <!-- king-sso-core -->
         <dependency>
             <groupId>com.king.sso</groupId>
             <artifactId>king-sso-core</artifactId>

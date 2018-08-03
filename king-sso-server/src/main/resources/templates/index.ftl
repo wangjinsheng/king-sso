@@ -28,7 +28,7 @@
                 <br>
                 <p>
                     <a target="_blank" href="https://github.com/wangjinsheng/king-sso">Github</a>&nbsp;&nbsp;&nbsp;&nbsp;
-                    <iframe src="https://ghbtns.com/github-btn.html?user=wangjinsheng&repo=xxl-sso&type=star&count=true" frameborder="0" scrolling="0" width="170px" height="20px" style="margin-bottom:-5px;"></iframe>
+                    <iframe src="https://ghbtns.com/github-btn.html?user=wangjinsheng&repo=king-sso&type=star&count=true" frameborder="0" scrolling="0" width="170px" height="20px" style="margin-bottom:-5px;"></iframe>
                     <br><br>
                     <br><br>
 
